@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&display=swap">
+<title>Alta Charla</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
+<style>
+/* Layout: una sola pantalla de celular; mesa verde petróleo, carta crema al centro, acciones abajo al alcance del pulgar */
+:root{
+  --mesa:#0F4A4F; --mesa-2:#0B3B3F; --crema:#FFF6E9; --tinta:#0F4A4F; --coral:#FF7A5C;
+  --suave:rgba(255,246,233,.72); --linea:rgba(255,246,233,.18);
+  --display:"Sora","Segoe UI",system-ui,sans-serif; --body:"DM Sans","Segoe UI",system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:radial-gradient(120% 80% at 50% 0%,#14595F 0%,var(--mesa) 45%,var(--mesa-2) 100%) fixed;background-color:var(--mesa);color:var(--crema);font:16px/1.45 var(--body);margin:0}
+.app{max-width:460px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:14px 18px}
+.screen{display:flex;flex-direction:column;gap:16px;flex:1}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance}
+button{font:700 16px var(--body);border:0;border-radius:14px;padding:14px 18px;cursor:pointer;color:var(--tinta);background:var(--crema)}
+button:focus-visible{outline:3px solid var(--coral);outline-offset:2px}
+button.coral{background:var(--coral);color:#2B0F08}
+button.ghost{background:transparent;color:var(--crema);border:1.5px solid var(--linea)}
+button.small{padding:8px 12px;font-size:14px;border-radius:10px}
+button:disabled{opacity:.4;cursor:default}
+.row{display:flex;gap:10px}.row>*{flex:1}
+.logo{display:flex;align-items:center;gap:10px;font:800 26px/1 var(--display);letter-spacing:-.01em}
+.logo svg{color:var(--coral)}
+.muted{color:var(--suave)}
+.eyebrow{font:700 11px/1 var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--suave)}
+
+/* inicio */
+.hero{flex:1;display:flex;flex-direction:column;justify-content:center;gap:18px;padding-block:20px}
+.hero h1{font-size:38px;line-height:1.05;letter-spacing:-.02em}
+.hero h1 em{font-style:normal;color:var(--coral)}
+.fan{position:relative;height:190px;margin:8px 0 6px}
+.fan .mini{position:absolute;left:50%;top:10px;width:118px;height:165px;margin-left:-59px;border-radius:12px;background:var(--crema);box-shadow:0 10px 24px rgba(0,0,0,.28);overflow:hidden}
+.fan .mini::before{content:"";position:absolute;inset:0 0 auto;height:30px;background:var(--c)}
+.fan .mini svg{position:absolute;left:10px;top:7px;color:#fff}
+.fan .mini i{position:absolute;left:12px;right:12px;height:7px;border-radius:4px;background:rgba(15,74,79,.16)}
+.meta{display:flex;gap:8px;flex-wrap:wrap}
+.meta span{font-size:13px;padding:5px 10px;border-radius:999px;border:1px solid var(--linea);color:var(--suave)}
+
+/* tutorial */
+.tut{flex:1;display:flex;flex-direction:column;gap:14px;justify-content:center}
+.tut .step{background:rgba(255,246,233,.07);border:1px solid var(--linea);border-radius:18px;padding:22px}
+.tut .num{font:800 13px var(--display);color:var(--coral);letter-spacing:.1em}
+.tut h2{font-size:24px;margin:6px 0 10px}
+.tut p{margin:0 0 8px}
+.dots{display:flex;gap:6px;justify-content:center}.dots i{width:7px;height:7px;border-radius:50%;background:var(--linea)}.dots i.on{background:var(--coral)}
+
+/* armado */
+.panel{background:rgba(255,246,233,.07);border:1px solid var(--linea);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.panel h3{font-size:16px}
+.players{display:flex;flex-direction:column;gap:8px}
+.player{display:flex;gap:8px}
+.player input{flex:1;min-width:0;font:500 16px var(--body);padding:11px 12px;border-radius:10px;border:1px solid var(--linea);background:rgba(0,0,0,.18);color:var(--crema)}
+.player input::placeholder{color:rgba(255,246,233,.45)}
+.player button{padding:0 12px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:9px 12px;border-radius:999px;border:1.5px solid var(--linea);background:transparent;color:var(--crema);font:600 14px var(--body)}
+.chip svg{color:var(--c,var(--crema))}
+.chip[aria-pressed="true"]{background:var(--crema);color:var(--tinta);border-color:var(--crema)}
+.chip[aria-pressed="true"] svg{color:var(--c,var(--tinta))}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.seg2{grid-template-columns:1fr 1fr}
+.seg button{padding:10px 6px;font-size:14px;background:transparent;color:var(--crema);border:1.5px solid var(--linea);border-radius:10px;line-height:1.2}
+.seg button small{display:block;font-weight:500;opacity:.7;font-size:12px}
+.seg button[aria-pressed="true"]{background:var(--crema);color:var(--tinta);border-color:var(--crema)}
+.hint{font-size:13px;color:var(--suave);margin:0}
+
+/* juego */
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.turn{display:flex;flex-direction:column;gap:2px}
+.turn b{font:800 22px/1.1 var(--display)}
+.count{font:700 14px var(--display);color:var(--suave);font-variant-numeric:tabular-nums;white-space:nowrap}
+.progress{height:4px;border-radius:2px;background:var(--linea);overflow:hidden}.progress i{display:block;height:100%;background:var(--coral);transition:width .35s}
+.stage{flex:1;display:flex;align-items:center;justify-content:center;perspective:1200px;min-height:380px}
+.card{position:relative;width:min(100%,330px);aspect-ratio:63/88;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.2,.7,.2,1)}
+.card.flip{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:18px;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.back{background:var(--c);display:flex;align-items:center;justify-content:center;color:#fff}
+.back .bl{display:flex;flex-direction:column;align-items:center;gap:10px;font:800 26px var(--display)}
+.back .bl small{font:600 13px var(--body);opacity:.9}
+.back::after{content:"";position:absolute;inset:12px;border:2px solid rgba(255,255,255,.45);border-radius:12px}
+.front{transform:rotateY(180deg);background:var(--crema);color:var(--tinta);display:flex;flex-direction:column}
+.front.gold{background:linear-gradient(180deg,#FFF1E0,#FFE4D3)}
+.band{background:var(--c);color:#fff;display:flex;align-items:center;gap:8px;padding:12px 16px;font:700 13px var(--display);letter-spacing:.02em}
+.band .n{margin-left:auto;opacity:.85;font-variant-numeric:tabular-nums}
+.body{flex:1;display:flex;flex-direction:column;padding:18px 18px 16px;gap:12px;overflow:auto}
+.body h2{font-size:24px;line-height:1.15}
+.body .tx{font-size:17px;line-height:1.45;margin:0}
+.foot{margin-top:auto;display:flex;flex-direction:column;gap:8px}
+.mec{font-size:13px;margin:0;color:#3D6B6E;font-style:italic}
+.star{display:flex;gap:8px;align-items:flex-start;font-size:13.5px;background:rgba(255,176,32,.16);border-radius:10px;padding:8px 10px}
+.star svg{color:#E09400;flex:none;margin-top:1px}
+.star.off{display:none}
+.actions{display:flex;flex-direction:column;gap:10px}
+.who{display:flex;flex-direction:column;gap:8px}
+.who .chips .chip{background:rgba(255,246,233,.1)}
+.tray{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:6px;font:600 13px var(--body);padding:6px 10px;border-radius:999px;background:rgba(255,246,233,.12);color:var(--crema);border:0}
+.pill svg{color:#FFB020}
+
+/* hoja */
+.sheet{position:fixed;inset:auto 0 0 0;background:var(--crema);color:var(--tinta);border-radius:22px 22px 0 0;padding:18px max(16px, env(safe-area-inset-right, 0px)) calc(18px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));max-height:75%;overflow:auto;box-shadow:0 -12px 40px rgba(0,0,0,.35);z-index:20;display:flex;flex-direction:column;gap:12px}
+.sheet .inner{max-width:430px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:12px}
+.sheet h3{font-size:18px}
+.sheet .item{border:1px solid rgba(15,74,79,.15);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:6px}
+.sheet .item b{font-family:var(--display)}
+.sheet .item p{margin:0;font-size:14px}
+.sheet button{background:var(--tinta);color:var(--crema)}
+.sheet button.ghost{background:transparent;color:var(--tinta);border-color:rgba(15,74,79,.25)}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:19}
+
+/* final */
+.final{flex:1;display:flex;flex-direction:column;gap:14px;justify-content:center}
+.final h1{font-size:32px}
+.rank{display:flex;flex-direction:column;gap:6px}
+.rank div{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:12px;background:rgba(255,246,233,.08);font-weight:600}
+.rank div.first{background:var(--crema);color:var(--tinta)}
+.rank span{font-variant-numeric:tabular-nums}
+.voice{display:inline-flex;align-items:center;gap:6px;font:600 13px var(--body);padding:7px 11px;border-radius:999px;background:rgba(255,246,233,.12);color:var(--crema);border:0}
+.voice[aria-pressed="false"]{opacity:.6}
+.relisten{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font:600 13px var(--body);padding:6px 10px;border-radius:999px;background:rgba(15,74,79,.08);color:var(--tinta);border:0}
+.demo{font-size:12px;text-align:center;color:var(--suave);margin:0}
+@media (prefers-reduced-motion:reduce){.card{transition:none}.progress i{transition:none}}
+</style>
+<style>
+#kgate{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;
+ background:#FFF6EC;font-family:Nunito,"DM Sans",system-ui,sans-serif;color:#141414}
+#kgate .box{width:100%;max-width:380px;text-align:center}
+#kgate .seal{width:86px;height:86px;border-radius:50%;background:#141414;color:#FFF6EC;display:flex;align-items:center;justify-content:center;
+ margin:0 auto 14px;font-family:"Bagel Fat One",Fredoka,system-ui;font-size:17px}
+#kgate h1{font-family:Fredoka,"Sora",system-ui;font-weight:700;font-size:26px;margin:0 0 4px}
+#kgate p{margin:0 0 18px;color:#555;font-size:15px;line-height:1.4}
+#kgate input{width:100%;box-sizing:border-box;font:700 20px/1 ui-monospace,Menlo,monospace;letter-spacing:2px;text-align:center;
+ text-transform:uppercase;padding:16px;border:2px solid #141414;border-radius:14px;background:#fff;color:#141414}
+#kgate button{width:100%;margin-top:12px;padding:16px;border:0;border-radius:14px;background:#141414;color:#FFF6EC;
+ font:700 17px Fredoka,system-ui;cursor:pointer}
+#kgate button:disabled{opacity:.5}
+#kgate .err{color:#C62F2F;min-height:20px;margin-top:10px;font-size:14px}
+#kgate .alt{margin-top:18px;font-size:14px;color:#555}
+#kgate a{color:#141414;font-weight:700}
+</style>
+
+
+</head><body>
+<div class="app" id="app"></div>
+
+
+<div id="kgate"><div class="box">
+ <div class="seal">Kermés</div>
+ <h1>Alta Charla</h1>
+ <p>Ingresá el código que recibiste al comprar.</p>
+ <input id="kcode" placeholder="KERM-XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false">
+ <button id="kgo">Jugar</button>
+ <div class="err" id="kerr"></div>
+ <div class="alt">¿Todavía no lo tenés? <a href="../comprar/alta-charla/">Compralo acá</a><br>
+ ¿Perdiste el código? <a href="../gracias/?juego=alta-charla">Recuperalo</a></div>
+</div></div>
+<script type="text/plain" id="kmain">
+const ICON={"risa": "<circle cx=\"12\" cy=\"12\" r=\"9\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/><path d=\"M7.5 13.5c1.2 2.4 2.7 3.5 4.5 3.5s3.3-1.1 4.5-3.5z\" fill=\"currentColor\"/><path d=\"M8 9.5l1.6-1.2M16 9.5l-1.6-1.2\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"/>", "radar": "<circle cx=\"12\" cy=\"12\" r=\"2.2\" fill=\"currentColor\"/><path d=\"M12 4a8 8 0 1 1-8 8M12 7.5a4.5 4.5 0 1 1-4.5 4.5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"/><path d=\"M12 12L18 6\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"/>", "burbuja": "<path d=\"M4 5h16v11H10l-5 4v-4H4z\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\"/><path d=\"M12 13.6l-2.6-2.5a1.6 1.6 0 0 1 2.6-1.9 1.6 1.6 0 0 1 2.6 1.9z\" fill=\"currentColor\"/>", "rayo": "<path d=\"M13.5 2L5 13.5h6L9.5 22 19 9.5h-6z\" fill=\"currentColor\"/>", "manos": "<circle cx=\"9\" cy=\"12\" r=\"5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\"/><circle cx=\"15\" cy=\"12\" r=\"5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\"/>", "estrella": "<path d=\"M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z\" fill=\"currentColor\"/>", "charla": "<path d=\"M3 4.5h11.5a1.5 1.5 0 0 1 1.5 1.5v6.5a1.5 1.5 0 0 1-1.5 1.5H8.5L5 17v-3H3a1.5 1.5 0 0 1-1.5-1.5V6A1.5 1.5 0 0 1 3 4.5z\" fill=\"currentColor\"/><path d=\"M18 8.5h3a1.5 1.5 0 0 1 1.5 1.5v6.5a1.5 1.5 0 0 1-1.5 1.5h-1V21l-3.5-3h-5a1.5 1.5 0 0 1-1.5-1.5V16h5a3 3 0 0 0 3-3z\" fill=\"currentColor\" opacity=\".55\"/>"};
+const CATS=DATA.categorias, CARDS=DATA.cartas;
+const LAST=CARDS.find(c=>c.id===100);
+const PODER=[85,86,87,88,89,90], VALE=[97,98,99], CONTRAMANO=95;
+const svg=(n,s=20)=>`<svg viewBox="0 0 24 24" width="${s}" height="${s}" aria-hidden="true">${ICON[n]}</svg>`;
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+const $=s=>document.querySelector(s);
+const app=$("#app");
+
+let VOICE=true; try{VOICE=localStorage.getItem("ac_voice")!=="off"}catch(e){}
+const player=new Audio(); let queue=[];
+function stopVoice(){queue=[];player.pause();}
+function say(files){stopVoice(); if(!VOICE) return; queue=files.slice(); playNext();}
+function playNext(){const f=queue.shift(); if(!f) return; player.src="audio/"+f; player.playbackRate=1.2; player.preservesPitch=true; player.play().catch(()=>{});}
+player.addEventListener("ended",playNext);
+const SPK='<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+const voiceBtn=(short)=>`<button class="voice" id="voice" aria-pressed="${VOICE}" aria-label="Voz">${SPK}${short?"":(VOICE?" Voz activada":" Voz apagada")}</button>`;
+function bindVoice(onOn,short){const b=document.getElementById("voice"); if(!b) return; b.onclick=()=>{VOICE=!VOICE; try{localStorage.setItem("ac_voice",VOICE?"on":"off")}catch(e){} if(!VOICE) stopVoice(); b.setAttribute("aria-pressed",VOICE); b.innerHTML=SPK+(short?"":(VOICE?" Voz activada":" Voz apagada")); if(VOICE&&onOn) onOn();}}
+let S={screen:"home",tut:0,players:["",""],cats:Object.keys(CATS),len:30,mode:"libre",
+  deck:[],i:0,turn:0,dir:1,stars:{},saved:{},flipped:false,awaitStar:false,sheet:null};
+try{const p=JSON.parse(localStorage.getItem("ac_players")||"null"); if(Array.isArray(p)&&p.length>=2) S.players=p;}catch(e){}
+
+const names=()=>S.players.map((p,i)=>p.trim()||("Jugador "+(i+1)));
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+function render(){
+  S.sheet=null; stopVoice();
+  ({home,tut,setup,game,fin})[S.screen]();
+}
+
+function home(){
+  const fan=["reir","conocer","jugar","equipo","sorpresa"].map((k,i)=>{
+    const r=(i-2)*11, x=(i-2)*34;
+    return `<div class="mini" style="--c:${CATS[k].color};transform:translateX(${x}px) rotate(${r}deg)">${svg(CATS[k].icono,16)}<i style="top:46px"></i><i style="top:60px;right:30px"></i><i style="top:74px;right:20px"></i></div>`}).join("");
+  app.innerHTML=`<div class="screen"><div class="hero">
+    <div class="logo">${svg("charla",34)}<span>alta charla</span></div>
+    <div class="fan" aria-hidden="true">${fan}</div>
+    <h1>El juego para que en casa <em>se hable de verdad</em>.</h1>
+    <p class="muted" style="margin:0">100 cartas para reírse, conocerse y jugar en familia. Un celular en el medio de la mesa y se van pasando el turno.</p>
+    <div class="meta"><span>2 a 6 jugadores</span><span>desde 12 años</span><span>20 a 60 min</span></div>
+  </div>
+  <div class="actions"><button class="coral" id="go">Armar la partida</button><button class="ghost" id="how">Cómo se juega</button></div>
+  <div style="display:flex;justify-content:center">${voiceBtn()}</div><p class="demo">Kermés · Alta Charla</p></div>`;
+  bindVoice();
+  $("#go").onclick=()=>{S.screen="setup";render()};
+  $("#how").onclick=()=>{S.screen="tut";S.tut=0;render()};
+}
+
+const TUT=[
+ ["Un celular, toda la familia","<p>Pongan este celular en el medio de la mesa. Los demás, boca abajo: esa es la <b>zona celu</b>.</p><p>Cuando es tu turno, tocás la carta, la escuchás o la leés en voz alta y hacen lo que dice. Si dice <b>\"Participan todos\"</b>, se suma toda la mesa.</p>"],
+ ["Pasar siempre está permitido","<p>Cualquiera puede decir \"paso\" sin explicar por qué y sacar otra carta. No se pierde nada y nadie insiste.</p><p>\"La persona que elegiste\" es quien vos quieras. De a dos, siempre es el otro.</p>"],
+ ["Dos formas de jugar","<p><b>Modo libre:</b> por diversión, sin ganadores.</p><p><b>Modo desafío:</b> las cartas con ★ dicen quién se las queda. Al final, quien tiene más ★ propone el próximo plan familiar.</p><p>Las cartas de <b>poder</b> y los <b>vales</b> se guardan para usarlos después.</p>"],
+ ["Para los adultos","<p>Escuchen sin interrumpir, no corrijan ni sermoneen, acepten los silencios y no insistan cuando alguien pasa.</p><p>La última carta siempre es <b>La última palabra</b>: cada uno cuenta su momento favorito de la partida.</p>"]
+];
+function tut(){
+  const [t,b]=TUT[S.tut];
+  app.innerHTML=`<div class="screen"><div class="top"><div class="logo" style="font-size:18px">${svg("charla",22)}<span>alta charla</span></div><button class="ghost small" id="skip">Saltar</button></div>
+  <div class="tut"><div class="step"><div class="num">${S.tut+1} de ${TUT.length}</div><h2>${t}</h2>${b}<button class="relisten" id="hear" style="background:rgba(255,246,233,.12);color:var(--crema)">${SPK} Escuchar</button></div><div style="display:flex;justify-content:center">${voiceBtn()}</div>
+  <div class="dots">${TUT.map((_,i)=>`<i class="${i===S.tut?"on":""}"></i>`).join("")}</div></div>
+  <div class="row"><button class="ghost" id="prev" ${S.tut?"":"disabled"}>Atrás</button><button class="coral" id="next">${S.tut<TUT.length-1?"Siguiente":"Armar la partida"}</button></div></div>`;
+  const tf=["t"+S.tut+".mp3"];
+  $("#hear").onclick=()=>{const v=VOICE;VOICE=true;say(tf);VOICE=v}; bindVoice(()=>say(tf)); say(tf);
+  $("#skip").onclick=()=>{S.screen="setup";render()};
+  $("#prev").onclick=()=>{S.tut--;render()};
+  $("#next").onclick=()=>{if(S.tut<TUT.length-1){S.tut++;render()}else{S.screen="setup";render()}};
+}
+
+function setup(){
+  const lens=[[20,"Corta","20 cartas"],[30,"Normal","30 cartas"],[45,"Larga","45 cartas"],[99,"Libre","todo el mazo"]];
+  const avail=CARDS.filter(c=>c.id!==100&&S.cats.includes(c.cat)).length;
+  app.innerHTML=`<div class="screen">
+   <div class="top"><button class="ghost small" id="back">← Inicio</button><span class="eyebrow">Armar la partida</span></div>
+   <div class="panel"><h3>¿Quiénes juegan?</h3><div class="players">${S.players.map((p,i)=>`<div class="player"><input id="p${i}" maxlength="18" placeholder="Jugador ${i+1}" value="${esc(p)}" aria-label="Nombre del jugador ${i+1}">${S.players.length>2?`<button class="ghost small" data-rm="${i}" aria-label="Quitar">✕</button>`:""}</div>`).join("")}</div>
+     ${S.players.length<6?`<button class="ghost small" id="add">+ Sumar jugador</button>`:""}
+     <p class="hint">Empieza quien usó el celular más recientemente: ponelo primero.</p></div>
+   <div class="panel"><h3>Categorías</h3><div class="chips">${Object.entries(CATS).map(([k,c])=>`<button class="chip" style="--c:${c.color}" data-cat="${k}" aria-pressed="${S.cats.includes(k)}">${svg(c.icono,16)}${esc(c.nombre)}</button>`).join("")}</div>
+     <p class="hint">${avail} cartas disponibles. Sacá las que no quieran usar hoy.</p></div>
+   <div class="panel"><h3>Duración</h3><div class="seg">${lens.map(([n,a,b])=>`<button data-len="${n}" aria-pressed="${S.len===n}">${a}<small>${b}</small></button>`).join("")}</div></div>
+   <div class="panel"><h3>Modo</h3><div class="seg seg2">
+     <button data-mode="libre" aria-pressed="${S.mode==="libre"}">Libre<small>sin ganadores</small></button>
+     <button data-mode="desafio" aria-pressed="${S.mode==="desafio"}">Desafío<small>se juntan ★</small></button></div></div>
+   <button class="coral" id="start" ${S.cats.length?"":"disabled"}>Empezar a jugar</button></div>`;
+  const sync=()=>S.players.forEach((_,i)=>S.players[i]=$("#p"+i).value);
+  $("#back").onclick=()=>{sync();S.screen="home";render()};
+  if($("#add"))$("#add").onclick=()=>{sync();S.players.push("");render();$("#p"+(S.players.length-1)).focus()};
+  app.querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>{sync();S.players.splice(+b.dataset.rm,1);render()});
+  app.querySelectorAll("[data-cat]").forEach(b=>b.onclick=()=>{sync();const k=b.dataset.cat;S.cats=S.cats.includes(k)?S.cats.filter(x=>x!==k):[...S.cats,k];render()});
+  app.querySelectorAll("[data-len]").forEach(b=>b.onclick=()=>{sync();S.len=+b.dataset.len;render()});
+  app.querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>{sync();S.mode=b.dataset.mode;render()});
+  $("#start").onclick=()=>{sync();try{localStorage.setItem("ac_players",JSON.stringify(S.players))}catch(e){} start()};
+}
+
+function start(){
+  const pool=shuffle(CARDS.filter(c=>c.id!==100&&S.cats.includes(c.cat)));
+  S.deck=[...pool.slice(0,Math.min(S.len,pool.length)),LAST];
+  S.i=0;S.turn=0;S.dir=1;S.flipped=false;S.awaitStar=false;
+  S.stars={};S.saved={};names().forEach(n=>{S.stars[n]=0;S.saved[n]=[]});
+  S.screen="game";render();
+}
+
+const cur=()=>S.deck[S.i];
+const who=()=>names()[S.turn];
+function nextTurn(){const n=names().length;S.turn=((S.turn+S.dir)%n+n)%n}
+function advance(passed){
+  const c=cur();
+  if(!passed){
+    if(c.id===CONTRAMANO){ if(names().length>2) S.dir*=-1; else {S.i++;S.flipped=false;render();return} }
+  }
+  S.i++;S.flipped=false;S.awaitStar=false;
+  if(!passed) nextTurn();
+  render();
+}
+
+function game(){
+  const c=cur(), cat=CATS[c.cat], total=S.deck.length, isLast=c.id===100;
+  const nm=names(), me=who();
+  const isPoder=PODER.includes(c.id), isVale=VALE.includes(c.id);
+  const hasStar=S.mode==="desafio"&&c.star;
+  const mySaved=S.saved[me]||[];
+  const starsTxt=S.mode==="desafio"?`<span class="pill">${svg("estrella",14)} ${S.stars[me]} ★</span>`:"";
+  let actions="";
+  if(!S.flipped){
+    actions=`<button class="coral" id="flip">Dar vuelta la carta</button>`;
+  } else if(isLast){
+    actions=`<button class="coral" id="end">Terminar la partida</button>`;
+  } else if(S.awaitStar){
+    actions=`<div class="who"><span class="eyebrow">¿Quién se queda la carta?</span><div class="chips">${nm.map(n=>`<button class="chip" data-star="${esc(n)}">${esc(n)}</button>`).join("")}<button class="chip" data-star="">Nadie</button></div></div>`;
+  } else if(isPoder||isVale){
+    actions=`<button class="coral" id="keep">Guardar para ${esc(me)}</button><button class="ghost" id="pass">Paso, otra carta</button>`;
+  } else {
+    actions=`<button class="coral" id="done">${hasStar?"Listo, ¿quién se la queda?":"Listo, sigue el turno"}</button><button class="ghost" id="pass">Paso, otra carta</button>`;
+  }
+  app.innerHTML=`<div class="screen">
+   <div class="top"><div class="turn"><span class="eyebrow">${isLast?"Última ronda":"Le toca a"}</span><b>${isLast?"Todos":esc(me)}</b></div>
+     <div class="tray">${voiceBtn(true)}${starsTxt}${mySaved.length&&!isLast?`<button class="pill" id="tray">${svg("estrella",14)} Guardadas (${mySaved.length})</button>`:""}<span class="count">${S.i+1}/${total}</span></div></div>
+   <div class="progress"><i style="width:${(S.i+1)/total*100}%"></i></div>
+   <div class="stage"><div class="card ${S.flipped?"flip":""}" id="card" style="--c:${cat.color}" role="button" tabindex="0" aria-label="${S.flipped?esc(c.t):"Dar vuelta la carta"}">
+     <div class="face back"><div class="bl">${svg(cat.icono,64)}<span>alta charla</span><small>${esc(cat.nombre)}</small></div></div>
+     <div class="face front ${c.cat==="sorpresa"?"gold":""}"><div class="band">${svg(cat.icono,18)}<span>${esc(cat.nombre)}</span><span class="n">${c.id}</span></div>
+       <div class="body"><h2>${esc(c.t)}</h2><p class="tx">${esc(c.x)}</p>
+       ${S.flipped?`<button class="relisten" id="hear">${SPK} Escuchar de nuevo</button>`:""}<div class="foot">${c.mec?`<p class="mec">${esc(c.mec)}</p>`:""}${c.star?`<div class="star ${S.mode==="desafio"?"":"off"}">${svg("estrella",16)}<span><b>Modo desafío.</b> ${esc(c.star)}</span></div>`:""}</div></div></div>
+   </div></div>
+   <div class="actions">${actions}</div></div>`;
+  const files=["c"+c.id+".mp3"].concat(hasStar?["s"+c.id+".mp3"]:[]);
+  const flip=()=>{if(!S.flipped){S.flipped=true;$("#card").classList.add("flip");say(files);setTimeout(game,560)}};
+  bindVoice(()=>{if(S.flipped)say(files)},true);
+  if($("#hear"))$("#hear").onclick=e=>{e.stopPropagation();const v=VOICE;VOICE=true;say(files);VOICE=v};
+  $("#card").onclick=flip; $("#card").onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flip()}};
+  if($("#flip"))$("#flip").onclick=flip;
+  if($("#pass"))$("#pass").onclick=()=>advance(true);
+  if($("#done"))$("#done").onclick=()=>{if(hasStar){S.awaitStar=true;render()}else advance(false)};
+  if($("#keep"))$("#keep").onclick=()=>{S.saved[me].push(c);advance(false)};
+  if($("#end"))$("#end").onclick=()=>{S.screen="fin";render()};
+  if($("#tray"))$("#tray").onclick=()=>openTray(me);
+  app.querySelectorAll("[data-star]").forEach(b=>b.onclick=()=>{const n=b.dataset.star;if(n)S.stars[n]++;advance(false)});
+}
+
+function openTray(me){
+  const list=S.saved[me];
+  const scrim=document.createElement("div");scrim.className="scrim";
+  const sh=document.createElement("div");sh.className="sheet";sh.setAttribute("role","dialog");sh.setAttribute("aria-label","Cartas guardadas");
+  const close=()=>{scrim.remove();sh.remove()};
+  sh.innerHTML=`<div class="inner"><h3>Cartas guardadas de ${esc(me)}</h3>${list.map((c,k)=>`<div class="item"><b>${esc(c.t)}</b><p>${esc(c.x)}</p>${PODER.includes(c.id)?`<button class="small" data-use="${k}">Usar ahora</button>`:`<p class="hint" style="color:#3D6B6E">Vale: se usa después de la partida.</p>`}</div>`).join("")}<button class="ghost" id="cl">Cerrar</button></div>`;
+  document.body.append(scrim,sh);
+  scrim.onclick=close; sh.querySelector("#cl").onclick=close;
+  sh.querySelectorAll("[data-use]").forEach(b=>b.onclick=()=>{const [c]=list.splice(+b.dataset.use,1);S.deck.splice(S.deck.length-1,0,c);close();render()});
+}
+
+function fin(){
+  const nm=names();
+  const vales=nm.flatMap(n=>S.saved[n].filter(c=>VALE.includes(c.id)).map(c=>({n,c})));
+  let rank="";
+  if(S.mode==="desafio"){
+    const sorted=[...nm].sort((a,b)=>S.stars[b]-S.stars[a]);
+    const top=S.stars[sorted[0]];
+    rank=`<div class="panel"><h3>Estrellas de la partida</h3><div class="rank">${sorted.map(n=>`<div class="${S.stars[n]===top&&top>0?"first":""}"><span>${esc(n)}</span><span>${S.stars[n]} ★</span></div>`).join("")}</div>
+     <p class="hint">${top>0?`${sorted.filter(n=>S.stars[n]===top).map(esc).join(" y ")} propone${sorted.filter(n=>S.stars[n]===top).length>1?"n":""} el próximo plan familiar.`:"Nadie juntó estrellas esta vez."}</p></div>`;
+  }
+  app.innerHTML=`<div class="screen"><div class="final">
+    <div class="logo" style="font-size:20px">${svg("charla",26)}<span>alta charla</span></div>
+    <h1>¡Gracias por jugar!</h1><p class="muted" style="margin:0">Jugaron ${S.deck.length} cartas. Antes de levantarse: ¿qué carta les gustaría que volviera a salir?</p>
+    ${rank}
+    ${vales.length?`<div class="panel"><h3>Vales para usar</h3><div class="rank">${vales.map(v=>`<div><span>${esc(v.c.t)}</span><span class="muted">${esc(v.n)}</span></div>`).join("")}</div></div>`:""}
+  </div><div class="actions"><button class="coral" id="again">Jugar otra partida</button><button class="ghost" id="home">Volver al inicio</button></div></div>`;
+  $("#again").onclick=()=>{S.screen="setup";render()};
+  $("#home").onclick=()=>{S.screen="home";render()};
+}
+render();
+</script>
+<script>
+(function(){
+ const API="https://uajwwdvlybambkawcngq.supabase.co/functions/v1", SLUG="alta-charla", KEY="kermes_"+SLUG;
+ const inp=document.getElementById("kcode"), btn=document.getElementById("kgo"), err=document.getElementById("kerr");
+ const q=new URLSearchParams(location.search).get("c");
+ let saved=null; try{saved=localStorage.getItem(KEY)}catch(e){}
+ if(q){inp.value=q; history.replaceState(null,"",location.pathname)} else if(saved) inp.value=saved;
+ async function go(){
+  const codigo=inp.value.trim().toUpperCase(); if(!codigo){err.textContent="Escribí tu código.";return}
+  btn.disabled=true; btn.textContent="Abriendo…"; err.textContent="";
+  try{
+   const r=await fetch(API+"/jugar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({codigo,juego:SLUG})});
+   const j=await r.json();
+   if(!r.ok) throw new Error(j.error||"Código no válido");
+   try{localStorage.setItem(KEY,codigo)}catch(e){}
+   const s=document.createElement("script");
+   s.textContent="const DATA="+JSON.stringify(j.data)+";\n"+document.getElementById("kmain").textContent;
+   document.body.appendChild(s);
+   document.getElementById("kgate").remove();
+  }catch(e){err.textContent=e.message||"No pudimos validar el código."; btn.disabled=false; btn.textContent="Jugar"}
+ }
+ btn.onclick=go; inp.addEventListener("keydown",e=>{if(e.key==="Enter")go()});
+ if(q||saved) go();
+})();
+</script>
+
+
+</body></html>

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>¡Gracias! · Kermés</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Fredoka:wght@600;700&family=Nunito:wght@400;700;800&display=swap">
+<style>
+:root{--crema:#FFF6EC;--negro:#141414;--suave:#5b5b5b;--rosa:#FF4F8B;--ok:#2EC4B6}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--crema);color:var(--negro);font-family:Nunito,system-ui,sans-serif;
+ display:flex;align-items:center;justify-content:center;padding:24px 16px}
+.box{width:100%;max-width:400px;text-align:center}
+.seal{width:96px;height:96px;border-radius:50%;background:var(--negro);color:var(--crema);display:flex;flex-direction:column;
+ align-items:center;justify-content:center;margin:0 auto 16px;font-family:"Bagel Fat One",Fredoka,system-ui;font-size:22px}
+.seal small{font:800 7px Nunito;letter-spacing:1.2px;margin-top:2px}
+h1{font:700 28px Fredoka,system-ui;margin:0 0 6px}
+p{color:var(--suave);font-size:15px;line-height:1.45;margin:0 0 16px}
+.code{font:800 26px ui-monospace,Menlo,monospace;letter-spacing:2px;background:#fff;border:2px dashed var(--negro);
+ border-radius:16px;padding:18px 10px;margin:8px 0 10px;user-select:all}
+.btn{display:block;width:100%;padding:16px;border:0;border-radius:14px;background:var(--negro);color:var(--crema);
+ font:700 17px Fredoka,system-ui;text-decoration:none;cursor:pointer;margin-top:10px}
+.btn.sec{background:transparent;color:var(--negro);border:2px solid var(--negro)}
+input{width:100%;font:700 18px ui-monospace,Menlo,monospace;text-align:center;padding:14px;border:2px solid var(--negro);border-radius:14px;background:#fff}
+.err{color:#C62F2F;min-height:20px;font-size:14px;margin-top:8px}
+.tip{font-size:13px;margin-top:18px}
+.hide{display:none}
+a{color:var(--negro);font-weight:700}
+</style>
+</head><body>
+<main class="box">
+ <div class="seal">K<small>JUEGOS PARA CHARLAR</small></div>
+
+ <section id="cargando"><h1>Un segundito…</h1><p>Estamos confirmando tu pago con Mercado Pago.</p></section>
+
+ <section id="listo" class="hide">
+  <h1>¡Ya es tuyo! 🎉</h1>
+  <p>Este es tu código para <b id="nombre"></b>. Sacale captura o guardalo: te sirve para volver a entrar cuando quieras.</p>
+  <div class="code" id="codigo"></div>
+  <button class="btn sec" id="copiar">Copiar código</button>
+  <a class="btn" id="jugar" href="#">Jugar ahora</a>
+  <p class="tip">¿Dudas? Escribinos a <a href="https://instagram.com/kermes_juegos">@kermes_juegos</a></p>
+ </section>
+
+ <section id="pendiente" class="hide">
+  <h1>Tu pago está en proceso</h1>
+  <p>Cuando Mercado Pago lo acredite, volvé a esta página e ingresá el <b>número de operación</b> que figura en tu comprobante.</p>
+ </section>
+
+ <section id="recuperar" class="hide">
+  <h1 id="rtitulo">Recuperá tu código</h1>
+  <p>Ingresá el <b>número de operación</b> de Mercado Pago (está en el comprobante y en el mail de MP).</p>
+  <input id="opnum" inputmode="numeric" placeholder="Nº de operación">
+  <button class="btn" id="buscar">Ver mi código</button>
+  <div class="err" id="err"></div>
+  <p class="tip">¿No lo encontrás? Escribinos a <a href="https://instagram.com/kermes_juegos">@kermes_juegos</a></p>
+ </section>
+</main>
+<script>
+const API="https://uajwwdvlybambkawcngq.supabase.co/functions/v1";
+const P=new URLSearchParams(location.search);
+const $=id=>document.getElementById(id);
+const show=id=>["cargando","listo","pendiente","recuperar"].forEach(s=>$(s).classList.toggle("hide",s!==id));
+
+async function canjear(pid){
+  const r=await fetch(API+"/canje?payment_id="+encodeURIComponent(pid));
+  const j=await r.json(); if(!r.ok) throw Object.assign(new Error(j.error||"No encontramos ese pago."),{estado:j.estado});
+  return j;
+}
+function listo(j){
+  $("nombre").textContent=j.nombre; $("codigo").textContent=j.codigo;
+  $("jugar").href="../"+j.juego+"/?c="+encodeURIComponent(j.codigo);
+  try{localStorage.setItem("kermes_"+j.juego,j.codigo)}catch(e){}
+  show("listo");
+  history.replaceState(null,"",location.pathname);
+}
+$("copiar").onclick=async()=>{try{await navigator.clipboard.writeText($("codigo").textContent);$("copiar").textContent="¡Copiado!"}catch(e){}};
+$("buscar").onclick=async()=>{
+  const v=$("opnum").value.replace(/\D/g,""); if(!v){$("err").textContent="Escribí el número de operación.";return}
+  $("buscar").disabled=true; $("err").textContent="";
+  try{listo(await canjear(v))}catch(e){$("err").textContent=e.estado&&e.estado!=="approved"?"Ese pago todavía no está aprobado.":e.message}
+  $("buscar").disabled=false;
+};
+(async()=>{
+  const pid=P.get("payment_id")||P.get("collection_id");
+  const st=P.get("status")||P.get("collection_status");
+  if(pid && pid!=="null"){
+    try{listo(await canjear(pid))}
+    catch(e){ if(st==="pending"||st==="in_process"||e.estado==="pending"||e.estado==="in_process") show("pendiente"); else {show("recuperar"); $("err").textContent=e.message} }
+  } else if(st==="pending"){ show("pendiente") }
+  else { show("recuperar") }
+})();
+</script>
+</body></html>
