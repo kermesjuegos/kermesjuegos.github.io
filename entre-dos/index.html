@@ -406,8 +406,7 @@ render();
  if("serviceWorker" in navigator){ try{navigator.serviceWorker.register("sw.js")}catch(e){} }
  function start(data){
    const s=document.createElement("script");
-   s.textContent="const DATA="+JSON.stringify(data)+";
-"+document.getElementById("kmain").textContent;
+   s.textContent="const DATA="+JSON.stringify(data)+";\n"+document.getElementById("kmain").textContent;
    document.body.appendChild(s);
    document.getElementById("kgate").remove();
  }

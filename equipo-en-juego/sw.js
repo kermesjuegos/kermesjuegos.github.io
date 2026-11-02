@@ -1,5 +1,5 @@
 // Kermés: guarda el juego en el celular para usarlo sin conexión
-const C = "kermes-equipo-en-juego-202611022257", CORE = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png"], AUDIO = [];
+const C = "kermes-equipo-en-juego-202611022300", CORE = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png"], AUDIO = [];
 self.addEventListener("install", e => { self.skipWaiting(); e.waitUntil(caches.open(C).then(c => c.addAll(CORE))); });
 self.addEventListener("activate", e => {
   e.waitUntil((async () => {
