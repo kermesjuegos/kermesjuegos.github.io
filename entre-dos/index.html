@@ -402,19 +402,33 @@ render();
  const q=new URLSearchParams(location.search).get("c");
  let saved=null; try{saved=localStorage.getItem(KEY)}catch(e){}
  if(q){inp.value=q; history.replaceState(null,"",location.pathname)} else if(saved) inp.value=saved;
+ const CK="kermes_data_"+SLUG;
+ if("serviceWorker" in navigator){ try{navigator.serviceWorker.register("sw.js")}catch(e){} }
+ function start(data){
+   const s=document.createElement("script");
+   s.textContent="const DATA="+JSON.stringify(data)+";
+"+document.getElementById("kmain").textContent;
+   document.body.appendChild(s);
+   document.getElementById("kgate").remove();
+ }
+ function cached(codigo){ try{const c=JSON.parse(localStorage.getItem(CK)); if(c&&c.codigo===codigo) return c.data}catch(e){} return null }
  async function go(){
   const codigo=inp.value.trim().toUpperCase(); if(!codigo){err.textContent="Escribí tu código.";return}
   btn.disabled=true; btn.textContent="Abriendo…"; err.textContent="";
+  if(!navigator.onLine){ const d=cached(codigo); if(d){start(d);return} }
   try{
-   const r=await fetch(API+"/jugar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({codigo,juego:SLUG})});
-   const j=await r.json();
-   if(!r.ok) throw new Error(j.error||"Código no válido");
-   try{localStorage.setItem(KEY,codigo)}catch(e){}
-   const s=document.createElement("script");
-   s.textContent="const DATA="+JSON.stringify(j.data)+";\n"+document.getElementById("kmain").textContent;
-   document.body.appendChild(s);
-   document.getElementById("kgate").remove();
-  }catch(e){err.textContent=e.message||"No pudimos validar el código."; btn.disabled=false; btn.textContent="Jugar"}
+   const ctrl=new AbortController(); const tm=setTimeout(()=>ctrl.abort(),7000);
+   const r=await fetch(API+"/jugar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({codigo,juego:SLUG}),signal:ctrl.signal});
+   clearTimeout(tm);
+   const j=await r.json().catch(()=>({}));
+   if(!r.ok){ if(r.status>=500) throw new Error("net"); throw Object.assign(new Error(j.error||"Código no válido"),{hard:true}); }
+   try{localStorage.setItem(KEY,codigo); localStorage.setItem(CK,JSON.stringify({codigo,data:j.data}))}catch(e){}
+   start(j.data);
+  }catch(e){
+   if(!e.hard){ const d=cached(codigo); if(d){start(d);return} }
+   err.textContent=e.hard?e.message:"Sin conexión. La primera vez necesitás internet para abrir el juego.";
+   btn.disabled=false; btn.textContent="Jugar";
+  }
  }
  btn.onclick=go; inp.addEventListener("keydown",e=>{if(e.key==="Enter")go()});
  if(q||saved) go();
